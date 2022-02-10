@@ -63,9 +63,9 @@ tiar = float(tiar)
 
 from datetime import datetime as dt
 
+import fastparquet
 
-
-timestamp = dt.date(dt.now())
+timestamp = dt.today()
 
 
 #navngir kolonner
@@ -85,7 +85,9 @@ df = df.append(
     
     )
 
+df.to_parquet('test.parquet', engine='fastparquet')
 
+#pd.read_parquet('test.parquet', engine='fastparquet')
 
 print(df)
 
