@@ -7,6 +7,7 @@ This is a temporary script file.
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup as bs
+from datetime import datetime as dt
 
 url = "https://www.dnb.no/lan/boliglan/fastrente?mcc=ppc-google_boliglan-brand-fastrente&gclid=Cj0KCQiAoY-PBhCNARIsABcz770wPpwHwqEj63XdrGimJGe-n9_QEsmfQUTEhWrln1O9fqaFfz2CQIQaAnLkEALw_wcB"
 
@@ -47,7 +48,7 @@ femar = femar.rstrip("%")
 
 tiar = tiar.rstrip("%")
 
-
+#endrer komma til punktum for å kunne konvertere til tall
 trear = trear.replace(",",".")
 
 femar = femar.replace(",",".")
@@ -60,36 +61,25 @@ femar = float(femar)
 
 tiar = float(tiar)
 
-
-from datetime import datetime as dt
-
-import fastparquet
+#import fastparquet
 
 timestamp = dt.today()
-
-
-#navngir kolonner
-
-columns = ["Timestamp","Trear","Femar","Tiar"]
-
-df = pd.DataFrame(columns = columns)
-
-df = df.append(
-    {
-     "Timestamp": timestamp
-     ,"Trear": trear
-     ,"Femar": femar
-     ,"Tiar": tiar
-     }
-    ,ignore_index = True
+#lager en liste
+data = [(timestamp, trear, femar, tiar)]
     
-    )
+#putter listen inn i dataframe med kolonnenavn
+df = pd.DataFrame(data, columns=['Dttm','Trear','Femar','Tiar'])
+    
+print(df)    
 
-df.to_parquet('test.parquet', engine='fastparquet')
+#df.to_parquet('test.parquet', mode='a', engine='fastparquet')
 
-#pd.read_parquet('test.parquet', engine='fastparquet')
+df.to_csv('test.csv’, mode=’a’, index=False, header=False)
 
-print(df)
+#print(timestamp)
+
+
+#print(df)
 
 
 
