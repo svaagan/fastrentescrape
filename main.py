@@ -7,7 +7,8 @@ This is a temporary script file.
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup as bs
-from datetime import datetime as dt
+import datetime as dt
+import os
 
 url = "https://www.dnb.no/lan/boliglan/fastrente?mcc=ppc-google_boliglan-brand-fastrente&gclid=Cj0KCQiAoY-PBhCNARIsABcz770wPpwHwqEj63XdrGimJGe-n9_QEsmfQUTEhWrln1O9fqaFfz2CQIQaAnLkEALw_wcB"
 
@@ -63,26 +64,24 @@ tiar = float(tiar)
 
 #import fastparquet
 
-timestamp = dt.today()
+timestamp = dt.datetime.now()
+
 #lager en liste
 data = [(timestamp, trear, femar, tiar)]
     
 #putter listen inn i dataframe med kolonnenavn
-df = pd.DataFrame(data, columns=['Dttm','Trear','Femar','Tiar'])
+df = pd.DataFrame([(timestamp, trear, femar, tiar)],
+            columns = ('Dttm','Trear','Femar','Tiar')
+                 )
+                    
     
 print(df)    
 
-#df.to_parquet('test.parquet', mode='a', engine='fastparquet')
-
-df.to_csv('test.csv’, mode=’a’, index=False, header=False)
-
-#print(timestamp)
-
-
-#print(df)
-
-
-
+# if file does not exist write header 
+if not os.path.isfile('test.csv'):
+   df.to_csv('test.csv')
+else: # else it exists so append without writing the header
+   df.to_csv('test.csv', mode='a', header=False)
 
 
 
